@@ -8,13 +8,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 
-import static java.lang.Integer.parseInt;
+import static java.lang.Double.parseDouble;
 
 public class Debit extends AppCompatActivity {
 
@@ -52,56 +49,47 @@ public class Debit extends AppCompatActivity {
 
 
     private void Submit() {
-        StringBuilder obal = new StringBuilder();
-        String file = "debit.txt";
+        if(amount != null) {
+            String file = "debit.txt";
+            String obal = getStringFromFile(file);
 
-        // read original balance from a file
-        try {
-            FileInputStream fin = openFileInput(file);
-            int c;
-            while( (c = fin.read()) != -1){
-                obal.append(Character.toString((char)c));
-            }
-            fin.close();
-        } catch (Exception e) {
-            System.out.println("No previous debit file found, continuing...");
-        }
-
-        if (amount == null) {
-            balance.setText(obal);
-            //balance.setText("0.00");
-            //Toast.makeText(getBaseContext(),"enter amount", Toast.LENGTH_SHORT).show();
-        } else {
             // get current balance adding original balance to amount if original balance exists
             String cbal;
-            if(obal.toString().length() > 0) {
-                cbal = String.valueOf(parseInt(obal.toString()) + parseInt(amount.getText().toString()));
+            if (obal.length() > 0) {
+                cbal = String.valueOf(parseDouble(obal) + parseDouble(amount.getText().toString()));
             } else {
                 cbal = amount.getText().toString();
             }
             balance.setText(cbal);
 
-            // write the new balance to a file
             try {
-                FileOutputStream fos = openFileOutput(file, MODE_PRIVATE);
-                fos.write(cbal.getBytes());
-                fos.close();
-                Toast.makeText(getBaseContext(),"file saved", Toast.LENGTH_SHORT).show();
+                writeStringToFile(file, cbal);
+                Toast.makeText(getBaseContext(), "file saved", Toast.LENGTH_SHORT).show();
                 amount.setText(null);
-            } catch (Exception e) {
+            } catch(Exception e) {
                 e.printStackTrace();
             }
-            //try {
-            //    File debit = new File(file);
-            //    FileOutputStream fos = new FileOutputStream(debit);
-            //    fos.write(cbal.getBytes());
-            //    fos.close();
-            //    Toast.makeText(getBaseContext(), "file saved", Toast.LENGTH_SHORT).show();
-            //} catch (Exception e) {
-            //    e.printStackTrace();
-            //}
-            //balance.setText(amount.getText().toString());
-            //amount.setText(null);
         }
+    }
+
+    private String getStringFromFile(String file) {
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            FileInputStream fin = openFileInput(file);
+            int c;
+            while ((c = fin.read()) != -1) {
+                stringBuilder.append(Character.toString((char) c));
+            }
+            fin.close();
+        } catch (Exception e) {
+            System.out.println("No previous debit file found, continuing...");
+        }
+        return stringBuilder.toString();
+    }
+
+    private void writeStringToFile(String file, String value) throws Exception {
+        FileOutputStream fos = openFileOutput(file, MODE_PRIVATE);
+        fos.write(value.getBytes());
+        fos.close();
     }
 }
