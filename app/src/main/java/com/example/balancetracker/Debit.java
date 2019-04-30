@@ -54,56 +54,54 @@ public class Debit extends AppCompatActivity {
     private void Submit() {
         StringBuilder obal = new StringBuilder();
         String file = "debit.txt";
+
+        // read original balance from a file
+        try {
+            FileInputStream fin = openFileInput(file);
+            int c;
+            while( (c = fin.read()) != -1){
+                obal.append(Character.toString((char)c));
+            }
+            fin.close();
+        } catch (Exception e) {
+            System.out.println("No previous debit file found, continuing...");
+        }
+
         if (amount == null) {
+            balance.setText(obal);
+            //balance.setText("0.00");
+            //Toast.makeText(getBaseContext(),"enter amount", Toast.LENGTH_SHORT).show();
+        } else {
+            // get current balance adding original balance to amount if original balance exists
+            String cbal;
+            if(obal.toString().length() > 0) {
+                cbal = String.valueOf(parseInt(obal.toString()) + parseInt(amount.getText().toString()));
+            } else {
+                cbal = amount.getText().toString();
+            }
+            balance.setText(cbal);
+
+            // write the new balance to a file
             try {
-                FileInputStream fin = openFileInput(file);
-                int c;
-                while( (c = fin.read()) != -1){
-                    obal.append(Character.toString((char)c));
-                }
-                fin.close();
-                balance.setText(obal);
+                FileOutputStream fos = openFileOutput(file, MODE_PRIVATE);
+                fos.write(cbal.getBytes());
+                fos.close();
+                Toast.makeText(getBaseContext(),"file saved", Toast.LENGTH_SHORT).show();
+                amount.setText(null);
             } catch (Exception e) {
                 e.printStackTrace();
-            } finally {
-                balance.setText("0.00");
-                Toast.makeText(getBaseContext(),"enter amount", Toast.LENGTH_SHORT).show();
             }
-
-        } else {
-            try {
-                FileInputStream fin = openFileInput(file);
-                int c;
-                while( (c = fin.read()) != -1){
-                    obal.append(Character.toString((char)c));
-                }
-                fin.close();
-                String cbal = String.valueOf(parseInt(obal.toString()) + parseInt(amount.getText().toString()));
-                balance.setText(cbal);
-                try {
-                    FileOutputStream fos = openFileOutput(file, MODE_PRIVATE);
-                    fos.write(cbal.getBytes());
-                    fos.close();
-                    Toast.makeText(getBaseContext(),"file saved", Toast.LENGTH_SHORT).show();
-                    amount.setText(null);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    File debit = new File(file);
-                    FileOutputStream fos = new FileOutputStream(debit);
-                    fos.write(cbal.getBytes());
-                    fos.close();
-                    Toast.makeText(getBaseContext(),"file saved", Toast.LENGTH_SHORT).show();
-                    amount.setText(null);
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                balance.setText(amount.getText().toString());
-                amount.setText(null);
-            }
+            //try {
+            //    File debit = new File(file);
+            //    FileOutputStream fos = new FileOutputStream(debit);
+            //    fos.write(cbal.getBytes());
+            //    fos.close();
+            //    Toast.makeText(getBaseContext(), "file saved", Toast.LENGTH_SHORT).show();
+            //} catch (Exception e) {
+            //    e.printStackTrace();
+            //}
+            //balance.setText(amount.getText().toString());
+            //amount.setText(null);
         }
     }
 }
