@@ -7,10 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-
 import static java.lang.Double.parseDouble;
 
 public class Debit extends AppCompatActivity {
@@ -19,6 +17,7 @@ public class Debit extends AppCompatActivity {
     public EditText amount;
     public Button home;
     public Button submit;
+    static String fdebit = "debit.txt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +25,7 @@ public class Debit extends AppCompatActivity {
         setContentView(R.layout.activity_debit);
 
         balance = findViewById(R.id.eBalance);
+        balance.setText(getStringFromFile(fdebit));
 
         amount = findViewById(R.id.eNew);
 
@@ -49,21 +49,22 @@ public class Debit extends AppCompatActivity {
 
 
     private void Submit() {
+        String obal = getStringFromFile(fdebit);
         if(amount != null) {
-            String file = "debit.txt";
-            String obal = getStringFromFile(file);
 
             // get current balance adding original balance to amount if original balance exists
             String cbal;
             if (obal.length() > 0) {
                 cbal = String.valueOf(parseDouble(obal) + parseDouble(amount.getText().toString()));
-            } else {
+            } else if (parseDouble(amount.getText().toString()) > 0) {
                 cbal = amount.getText().toString();
+            } else {
+                cbal = "0.00";
             }
             balance.setText(cbal);
 
             try {
-                writeStringToFile(file, cbal);
+                writeStringToFile(fdebit, cbal);
                 Toast.makeText(getBaseContext(), "file saved", Toast.LENGTH_SHORT).show();
                 amount.setText(null);
             } catch(Exception e) {
@@ -72,7 +73,7 @@ public class Debit extends AppCompatActivity {
         }
     }
 
-    private String getStringFromFile(String file) {
+    public String getStringFromFile(String file) {
         StringBuilder stringBuilder = new StringBuilder();
         try {
             FileInputStream fin = openFileInput(file);
@@ -87,7 +88,7 @@ public class Debit extends AppCompatActivity {
         return stringBuilder.toString();
     }
 
-    private void writeStringToFile(String file, String value) throws Exception {
+    public void writeStringToFile(String file, String value) throws Exception {
         FileOutputStream fos = openFileOutput(file, MODE_PRIVATE);
         fos.write(value.getBytes());
         fos.close();

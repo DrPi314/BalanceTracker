@@ -33,7 +33,7 @@
         android:layout_marginRight="100dp"
         android:ems="10"
         android:hint="Transaction Amount"
-        android:inputType="numberDecimal"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/eBalance" />
@@ -47,7 +47,9 @@
         android:layout_marginTop="150dp"
         android:layout_marginEnd="75dp"
         android:layout_marginRight="75dp"
+        android:layout_marginBottom="150dp"
         android:text="Home"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/bSubmit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/eNew" />
@@ -67,4 +69,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/bHome"
         app:layout_constraintTop_toBottomOf="@+id/eNew" />
+
 </android.support.constraint.ConstraintLayout>
