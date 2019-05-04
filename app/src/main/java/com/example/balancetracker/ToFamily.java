@@ -51,14 +51,14 @@ public class ToFamily extends AppCompatActivity {
     }
 
     private void Transfer(){
-        String obalnana = getStringFromFile(ftonana);
-        String obaldad = getStringFromFile(ftodad);
+        String obaltonana = getStringFromFile(ftonana);
+        String obaltodad = getStringFromFile(ftodad);
         String odebit = getStringFromFile(fdebit);
-        String cdebit = String.valueOf(parseDouble(odebit) - parseDouble(obalnana) - parseDouble(obaldad));
+        String cdebit = String.valueOf(parseDouble(odebit) - parseDouble(obaltonana) - parseDouble(obaltodad));
         try {
-            writeStringToFile(ftonana, obalnana);
+            writeStringToFile(ftonana, "0.00");
             toNana.setText(null);
-            writeStringToFile(ftodad, obaldad);
+            writeStringToFile(ftodad, "0.00");
             toDad.setText(null);
             writeStringToFile(fdebit, cdebit);
         } catch (Exception e) {
@@ -75,10 +75,11 @@ public class ToFamily extends AppCompatActivity {
                 stringBuilder.append(Character.toString((char) c));
             }
             fin.close();
+            return stringBuilder.toString();
         } catch (Exception e) {
             System.out.println("No previous debit file found, continuing...");
+            return "0.00";
         }
-        return stringBuilder.toString();
     }
 
     private void writeStringToFile(String file, String value) throws Exception {

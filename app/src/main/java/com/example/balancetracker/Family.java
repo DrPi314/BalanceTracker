@@ -1,8 +1,8 @@
 package com.example.balancetracker;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +20,7 @@ public class Family extends AppCompatActivity {
     public Button addDad;
     public Button payNana;
     public Button payDad;
+    public Button home;
     static String fBalNana = "BalNana.txt";
     static String fBalDad = "BalDad.txt";
     static String fToNana = "toNana.txt";
@@ -33,10 +34,10 @@ public class Family extends AppCompatActivity {
 
         amount = findViewById(R.id.eAmount);
 
-        balNana = findViewById(R.id.eToNana);
+        balNana = findViewById(R.id.eBalNana);
         balNana.setText(getStringFromFile(fBalNana));
 
-        balDad = findViewById(R.id.eToDad);
+        balDad = findViewById(R.id.eBalDad);
         balDad.setText(getStringFromFile(fBalDad));
 
         addNana = findViewById(R.id.bAddNana);
@@ -68,6 +69,14 @@ public class Family extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 PayDad();
+            }
+        });
+
+        home = findViewById(R.id.bHome);
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Family.this, MainActivity.class));
             }
         });
     }
@@ -122,7 +131,7 @@ public class Family extends AppCompatActivity {
         String obal = getStringFromFile(fBalNana);
         String cbal = String.valueOf(parseDouble(obal) - parseDouble(amount.getText().toString()));
         String otonana = getStringFromFile(fToNana);
-        String ctonana = String.valueOf(parseDouble(otonana) + parseDouble(amount.getText().toString()));
+        String ctonana = String.valueOf((parseDouble(otonana) + parseDouble(amount.getText().toString())));
         try {
             writeStringToFile(fToNana, ctonana);
             writeStringToFile(fBalNana, cbal);
@@ -157,10 +166,11 @@ public class Family extends AppCompatActivity {
                 stringBuilder.append(Character.toString((char) c));
             }
             fin.close();
+            return stringBuilder.toString();
         } catch (Exception e) {
             System.out.println("No previous debit file found, continuing...");
+            return "0.00";
         }
-        return stringBuilder.toString();
     }
 
     private void writeStringToFile(String file, String value) throws Exception {
