@@ -17,12 +17,14 @@ public class ToCredit extends AppCompatActivity {
     public EditText amount;
     public Button home;
     public Button submit;
+    public Button transfer;
     static String ftocredit = "tocredit.txt";
+    static String fdebit = "debit.txt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_debit);
+        setContentView(R.layout.activity_to_credit);
 
         balance = findViewById(R.id.eBalance);
         balance.setText(getStringFromFile(ftocredit));
@@ -42,6 +44,14 @@ public class ToCredit extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Submit();
+            }
+        });
+
+        transfer = findViewById(R.id.bTransfer);
+        transfer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Transfer();
             }
         });
 
@@ -86,6 +96,20 @@ public class ToCredit extends AppCompatActivity {
             System.out.println("No previous debit file found, continuing...");
         }
         return stringBuilder.toString();
+    }
+
+    private void Transfer(){
+        String obal = getStringFromFile(ftocredit);
+        String cbal = String.valueOf(parseDouble(obal) - parseDouble(amount.getText().toString()));
+        String odebit = getStringFromFile(fdebit);
+        String cdebit = String.valueOf(parseDouble(odebit) - parseDouble(amount.getText().toString()));
+        try {
+            writeStringToFile(ftocredit, cbal);
+            amount.setText(null);
+            balance.setText(cbal);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void writeStringToFile(String file, String value) throws Exception {

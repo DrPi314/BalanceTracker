@@ -50,10 +50,9 @@
         android:layout_marginBottom="150dp"
         android:text="Home"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/bPay"
+        app:layout_constraintEnd_toStartOf="@+id/bPayCredit"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eNew"
-        app:layout_constraintVertical_bias="0.428" />
+        app:layout_constraintTop_toBottomOf="@+id/eNew" />
 
     <Button
         android:id="@+id/bSubmit"
@@ -68,21 +67,23 @@
         android:text="Submit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/bPay"
-        app:layout_constraintTop_toBottomOf="@+id/eNew"
-        app:layout_constraintVertical_bias="0.428" />
+        app:layout_constraintStart_toEndOf="@+id/bPayCredit"
+        app:layout_constraintTop_toBottomOf="@+id/eNew" />
 
     <Button
-        android:id="@+id/bPay"
+        android:id="@+id/bPayCredit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginLeft="30dp"
+        android:layout_marginTop="150dp"
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginBottom="150dp"
         android:text="Pay"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/bSubmit"
-        app:layout_constraintStart_toEndOf="@+id/bHome" />
+        app:layout_constraintEnd_toStartOf="@id/bSubmit"
+        app:layout_constraintStart_toEndOf="@id/bHome"
+        app:layout_constraintTop_toBottomOf="@+id/eNew" />
+
 </android.support.constraint.ConstraintLayout>

@@ -11,6 +11,8 @@ public class MainActivity extends AppCompatActivity {
     public Button credit;
     public Button toCredit;
     public Button debit;
+    public Button family;
+    public Button toFamily;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, Debit.class));
+            }
+        });
+
+        family = findViewById(R.id.bFamily);
+        family.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, Family.class));
+            }
+        });
+
+        toFamily = findViewById(R.id.bToFamily);
+        toFamily.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ToFamily.class));
             }
         });
     }

@@ -9,6 +9,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+
+import static android.app.PendingIntent.getActivity;
 import static java.lang.Double.parseDouble;
 
 public class Credit extends AppCompatActivity {
@@ -24,7 +26,7 @@ public class Credit extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_debit);
+        setContentView(R.layout.activity_credit);
 
         balance = findViewById(R.id.eBalance);
         balance.setText(getStringFromFile(fcredit));
@@ -39,19 +41,19 @@ public class Credit extends AppCompatActivity {
             }
         });
 
+        pay = findViewById(R.id.bPayCredit);
+        pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Pay();
+            }
+        });
+
         submit = findViewById(R.id.bSubmit);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Submit();
-            }
-        });
-
-        pay = findViewById(R.id.bPay);
-        pay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Pay();
             }
         });
     }
@@ -91,6 +93,7 @@ public class Credit extends AppCompatActivity {
             writeStringToFile(ftocredit, ctocredit);
             writeStringToFile(fcredit, cbal);
             amount.setText(null);
+            balance.setText(cbal);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -105,11 +108,11 @@ public class Credit extends AppCompatActivity {
                 stringBuilder.append(Character.toString((char) c));
             }
             fin.close();
-            return stringBuilder.toString();
         } catch (Exception e) {
             System.out.println("No previous debit file found, continuing...");
             return "0.00";
         }
+        return stringBuilder.toString();
     }
 
     private void writeStringToFile(String file, String value) throws Exception {
